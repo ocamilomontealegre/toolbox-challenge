@@ -6,3 +6,9 @@ services:
       - "3000:3000"
     volumes:
       - .:/src/index.js
+
+  front:
+    container_name: toolbox-challenge-front
+    build: ./front
+    ports:
+      - "4000:4000"
