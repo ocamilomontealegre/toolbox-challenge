@@ -1,0 +1,1 @@
+export const INTERNAL_SERVER_ERROR = { message: "Internal Server Error"};
