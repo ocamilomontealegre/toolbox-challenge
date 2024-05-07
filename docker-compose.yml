@@ -1,0 +1,8 @@
+services:
+  api:
+    container_name: toolbox-challenge-api
+    build: ./api
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/src/index.js
