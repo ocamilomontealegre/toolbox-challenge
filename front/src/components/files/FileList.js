@@ -1,36 +1,51 @@
-import React, { useState, useEffect } from 'react';
-import { Table } from 'react-bootstrap';
-import styles from './FileList.module.css'; // Assuming you have a CSS module
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Table } from "react-bootstrap";
+import FileRow from "./FileRow";
+import FileHeading from "./FileHeading";
+import FileFilter from "./FileFilter";
+import { Error, Loading } from "../states/index";
+import { fetchFilesData } from "../../redux/actions/actions";
 
 const FileList = () => {
-  const [files, setFiles] = useState([]);
+  const dispatch = useDispatch();
+  const { files, loading, error } = useSelector((state) => state);
+  const [fileNameFilter, setFileNameFilter] = useState('');
 
   useEffect(() => {
-    fetch('/files')
-      .then(response => response.json())
-      .then(data => setFiles(data))
-      .catch(error => console.error('Error fetching files:', error));
-  }, []); // Empty dependency array ensures the effect runs once on component mount
+    dispatch(fetchFilesData(fileNameFilter));
+  }, [dispatch, fileNameFilter]);
+
+  const applyFilter = (fileName) => {
+    setFileNameFilter(fileName);
+  };
+
+  if (loading) {
+    return <Loading />
+  }
+
+  if (error) {
+    return <Error error={error}/>
+  }
 
   return (
-    <div className={styles.tableContainer}>
-      <h2>Listado de Archivos</h2>
-      <Table striped bordered hover className={styles.table}>
+    <div>
+      <h1>File List</h1>
+      <FileFilter onFilter={applyFilter} />
+      <Table striped bordered hover>
         <thead>
-          <tr>
-            <th>ID</th>
-            <th>File Name</th>
-            <th>Type</th>
-          </tr>
         </thead>
+          <FileHeading />
         <tbody>
-          {files.map(file => (
-            <tr key={file.id}>
-              <td>{file.id}</td>
-              <td>{file.name}</td>
-              <td>{file.type}</td>
-            </tr>
-          ))}
+        </tbody>
+        <tbody>
+        {Array.isArray(files) ? (
+            files.map((file) => (
+              <FileRow key={file.file} file={file} />
+            ))
+          ) : (
+            <FileRow key={files.file} file={files} />
+          )}
         </tbody>
       </Table>
     </div>

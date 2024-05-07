@@ -1,5 +1,5 @@
-import axios from "axios";
 import { consumeApi } from "../services/axios/axiosService.js";
+import { searchFileData } from "../../shared/utils/searchFileData.js";
 import { toolboxApiConfig } from "../../shared/config/config.js";
 import { formattedData } from "../../shared/database/database.js";
 
@@ -36,7 +36,9 @@ export const processFile = async (fileName) => {
   try {
       const fileData = await getFileData(fileName);
       const parsedData = parseFileData(fileData);
-      formattedData.push({ file: fileName, lines: parsedData });
+
+      const data = searchFileData(formattedData, fileName);
+      if(!data) formattedData.push({ file: fileName, lines: parsedData });
   } catch (error) {
       console.error(`Error processing file ${fileName}: ${error.message}`);
   }

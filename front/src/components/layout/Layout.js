@@ -1,20 +1,23 @@
-import React from "react";
-import { Container, Navbar } from "react-bootstrap";
-import styles from "../../styles/layout/layout.module.css";
+import React from 'react';
+import { Container, Navbar} from 'react-bootstrap';
 
 const Layout = ({ children }) => {
   return (
-    <>
-      <Navbar bg="dark" variant="dark" className={styles.navbar}>
+    <div>
+      <Navbar bg="dark" variant="dark">
         <Container>
-          <Navbar.Brand href="/">React Test App</Navbar.Brand>
+          <Navbar.Brand href="#">React Test App</Navbar.Brand>
         </Container>
       </Navbar>
 
-      <Container className={styles.contentContainer}>
+      <Container className="mt-4">
         {children}
       </Container>
-    </>
+
+      <footer className="mt-4 text-center">
+        <p>&copy; Made with love by @ocamilomontealegre</p>
+      </footer>
+    </div>
   );
 };
 
